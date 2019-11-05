@@ -1,0 +1,102 @@
+{extend name="public:base" /}
+{block name="title"}欢迎页面-X-admin2.2{/block}
+{block name="body"}
+<style>
+    .layui-form-select{
+        width:20%;
+    }
+</style>
+    <body>
+        <div class="layui-fluid">
+            <div class="layui-row">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            姓名:<span style="color: deeppink">{$data.username}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            班级:<span style="color: deeppink">{$data.class_name}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            专业:<span style="color: deeppink">{$data.major_name}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            科目:<span style="color: deeppink">{$data.subject_name}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            考试时间:<span style="color: deeppink">{$data.add_time}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </div>
+                        <div class="layui-card-header">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            单选题:<span style="color: deeppink">{$data.single_scroe}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            多选题:<span style="color: deeppink">{$data.selection_scroe}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            判断题:<span style="color: deeppink">{$data.judge_scroe}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            操作题:<span style="color: deeppink">{$data.operation_scroe}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            总分:<span style="color: deeppink">{$data.scroe}</span>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="desc" class="layui-form-label">单选题答案</label>
+                        <div class="layui-input-block">
+                            <textarea lay-verify="required" disabled class="layui-textarea">{$data.single|str_replace='single','',###}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="desc" class="layui-form-label">多选题答案</label>
+                        <div class="layui-input-block">
+                            <textarea lay-verify="required" disabled class="layui-textarea">{$data.selection|str_replace='selection','',###}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="desc" class="layui-form-label">判断题答案</label>
+                        <div class="layui-input-block">
+                            <textarea lay-verify="required" disabled class="layui-textarea">{$data.judge|str_replace='judge','',###}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="desc" class="layui-form-label">操作题答案</label>
+                        <div class="layui-input-block">
+                            <textarea lay-verify="required" disabled class="layui-textarea">{$data.operation|str_replace='operation','',###}</textarea>
+                        </div>
+                    </div>
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label for="L_repass" class="layui-form-label"></label>
+                        <button class="layui-btn" lay-filter="add" lay-submit="">审核</button></div>
+                    <input type="hidden" name="id" value="{$data.id}">
+                </form>
+            </div>
+        </div>
+        <script>layui.use(['form', 'layer'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form,
+                layer = layui.layer;
+
+                //监听提交
+                form.on('submit(add)', function(data) {
+                    $.post("{:url('Scroe/officeRead')}",{data:data.field},function (data) {
+                        if(data.status == 1){
+                            //发异步，把数据提交给php
+                            layer.alert(data.msg, {icon: 6}, function() {
+                                // 获得frame索引
+                                var index = parent.layer.getFrameIndex(window.name);
+                                //关闭当前frame
+                                parent.layer.close(index);
+                                // 可以对父窗口进行刷新
+                                xadmin.father_reload();
+                            });
+                        }else{
+                            //发异步，把数据提交给php
+                            layer.alert(data.msg, {icon: 5}, function() {
+                                // 获得frame索引
+                                var index = parent.layer.getFrameIndex(window.name);
+                                //关闭当前frame
+                                parent.layer.close(index);
+                                // 可以对父窗口进行刷新
+                                xadmin.father_reload();
+                            });
+                        }
+                    });
+                    return false;
+                });
+
+            });</script>
+        <script>var _hmt = _hmt || []; (function() {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();</script>
+    </body>
+{/block}

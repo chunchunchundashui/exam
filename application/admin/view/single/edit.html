@@ -1,0 +1,122 @@
+{extend name="public:base" /}
+{block name="title"}欢迎页面-X-admin2.2{/block}
+{block name="body"}
+<style>
+    .layui-form-select{
+        width:20%;
+    }
+</style>
+    <body>
+        <div class="layui-fluid">
+            <div class="layui-row">
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label for="desc" class="layui-form-label">题目</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="请输入题目"  name="single_name" lay-verify="required" class="layui-textarea">{$data.single_name} </textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="desc" class="layui-form-label">A选项</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="请输入A选项" name="A"  lay-verify="required" class="layui-textarea">{$data.A}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="desc" class="layui-form-label">B选项</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="请输入B选项"  name="B"  lay-verify="required" class="layui-textarea">{$data.B}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="desc" class="layui-form-label">C选项</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="请输入C选项"  name="C" lay-verify="required" class="layui-textarea">{$data.C}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="desc" class="layui-form-label">D选项</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="请输入D选项"  name="D" lay-verify="required" class="layui-textarea">{$data.D}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="L_username" class="layui-form-label">
+                            <span class="x-red">*</span>正确答案</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_username" name="right_key" required="" value="{$data.right_key}" lay-verify="required" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="desc" class="layui-form-label">专业</label>
+                        <div class="layui-input-block">
+                            <select name="major_id" lay-verify="required">
+                                <option value="">请选择一个专业</option>
+                                {volist name="major" id="vo"}
+                                <option value="{$vo.id}" {eq name="data.major_id" value="$vo.id"}selected{/eq}>{$vo.major_name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="desc" class="layui-form-label">科目</label>
+                        <div class="layui-input-block">
+                            <select name="subject_id" lay-verify="required">
+                                <option value="">请选择一个科目</option>
+                                {volist name="subject" id="vo"}
+                                <option value="{$vo.id}" {eq name="data.subject_id" value="$vo.id"}selected{/eq}>{$vo.subject_name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="L_repass" class="layui-form-label"></label>
+                        <button class="layui-btn" lay-filter="add" lay-submit="">修改</button></div>
+                    <input type="hidden" name="id" value="{$data.id}">
+                </form>
+            </div>
+        </div>
+        <script>layui.use(['form', 'layer'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form,
+                layer = layui.layer;
+
+
+                //监听提交
+                form.on('submit(add)', function(data) {
+                    $.post("{:url('Single/edit')}",{data:data.field},function (data) {
+                        if(data.status == 1){
+                            //修改成功
+                            //发异步，把数据提交给php
+                            layer.alert(data.msg, {icon: 6}, function() {
+                                // 获得frame索引
+                                var index = parent.layer.getFrameIndex(window.name);
+                                //关闭当前frame
+                                parent.layer.close(index);
+                                // 可以对父窗口进行刷新
+                                xadmin.father_reload();
+                            });
+                        }else{
+                            //发异步，把数据提交给php
+                            layer.alert(data.msg, {icon: 5}, function() {
+                                // 获得frame索引
+                                var index = parent.layer.getFrameIndex(window.name);
+                                //关闭当前frame
+                                parent.layer.close(index);
+                                // 可以对父窗口进行刷新
+                                xadmin.father_reload();
+                            });
+                        }
+                    });
+                    return false;
+                });
+
+            });</script>
+        <script>var _hmt = _hmt || []; (function() {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();</script>
+    </body>
+{/block}

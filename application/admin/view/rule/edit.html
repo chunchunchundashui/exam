@@ -1,0 +1,112 @@
+{extend name="public:base" /}
+{block name="title"}欢迎页面-X-admin2.2{/block}
+{block name="body"}
+    <body>
+        <div class="layui-fluid">
+            <div class="layui-row">
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label for="username" class="layui-form-label">
+                            权限名称：
+                        </label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="username" name="rule_name" value="{$data.rule_name}" required="" lay-verify="required"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="phone" class="layui-form-label">
+                            模块：
+                        </label>
+                        <div class="layui-input-inline">
+                            <input type="text" value="{$data.module_name}" name="module_name" required="" lay-verify="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="phone" class="layui-form-label">
+                            控制器：
+                        </label>
+                        <div class="layui-input-inline">
+                            <input type="text" value="{$data.controller_name}" name="controller_name" required="" lay-verify="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="phone" class="layui-form-label">
+                            方法：
+                        </label>
+                        <div class="layui-input-inline">
+                            <input type="text" value="{$data.action_name}" name="action_name" required="" lay-verify="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="phone" class="layui-form-label">
+                            上级权限：
+                        </label>
+                        <div class="layui-inline layui-show-xs-block">
+                            <select name="parent_id">
+                                <option value="0">顶级权限</option>
+                                {volist name="rule" id="vo"}
+                                <option value="{$vo.id}" {eq name="data.parent_id" value="$vo.id"}selected{/eq}>{$vo.rule_name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="phone" class="layui-form-label">
+                            是否菜单显示：
+                        </label>
+                        <input type="radio" name="is_show" value="1" lay-skin="primary" title="是" {eq name="data.is_show" value="1"}checked=""{/eq}>
+                        <input type="radio" name="is_show" value="0" lay-skin="primary" title="否" {eq name="data.is_show" value="0"}checked=""{/eq}>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="L_repass" class="layui-form-label">
+                        </label>
+                        <button  class="layui-btn" lay-filter="add" lay-submit="">
+                            增加
+                        </button>
+                    </div>
+                    <input type="hidden" name="id" value="{$data.id}">
+                </form>
+            </div>
+        </div>
+        <script>layui.use(['form', 'layer'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form,
+                layer = layui.layer;
+
+
+                //监听提交
+                form.on('submit(add)', function(data) {
+                    $.post("{:url('Rule/edit')}",{data:data.field},function (data) {
+                        if(data.status == 1){
+                            //发异步，把数据提交给php
+                            layer.alert(data.msg, {icon: 6}, function() {
+                                //关闭当前frame
+                                xadmin.close();
+
+                                // 可以对父窗口进行刷新
+                                xadmin.father_reload();
+                            });
+                        }else{
+                            layer.alert(data.msg, {icon: 5}, function() {
+                                //关闭当前frame
+                                xadmin.close();
+
+                                // 可以对父窗口进行刷新
+                                xadmin.father_reload();
+                            });
+                        }
+                    });
+                    return false;
+                });
+
+            });</script>
+        <script>var _hmt = _hmt || []; (function() {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();</script>
+    </body>
+{/block}
